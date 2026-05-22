@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { supabaseClient } from "@/lib/client/supabaseClient";
 import { useRouter } from "next/navigation";
 
+export const dynamic = "force-dynamic";
+
 export default function UploadPage() {
   const router = useRouter();
   const [user, setUser] = useState<any>(null);
