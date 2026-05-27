@@ -6,11 +6,13 @@ import { formatDate, formatRupiah } from "../_lib/dashboardUtils";
 
 interface RecentReceiptsCardProps {
   loadingReceipts: boolean;
+  onOpenReceipt: (receipt: ReceiptItem) => void;
   recentReceipts: ReceiptItem[];
 }
 
 export default function RecentReceiptsCard({
   loadingReceipts,
+  onOpenReceipt,
   recentReceipts,
 }: RecentReceiptsCardProps) {
   return (
@@ -44,6 +46,7 @@ export default function RecentReceiptsCard({
           recentReceipts.map((receipt) => (
             <div
               key={receipt.id}
+              onClick={() => onOpenReceipt(receipt)}
               className="group flex cursor-pointer items-center gap-3 rounded-xl border border-transparent p-3 transition-all hover:border-[#E2E8F0] hover:bg-[#F8FAFC]"
             >
               <img
@@ -85,7 +88,7 @@ export default function RecentReceiptsCard({
         {loadingReceipts && (
           <div className="group relative flex items-center overflow-hidden rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] p-3">
             <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/60 backdrop-blur-sm">
-              <span className="flex items-center gap-1 text-xs font-bold text-[#2563EB] animate-pulse">
+              <span className="flex animate-pulse items-center gap-1 text-xs font-bold text-[#2563EB]">
                 <span className="animate-spin text-[14px]">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

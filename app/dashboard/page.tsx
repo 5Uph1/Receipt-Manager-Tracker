@@ -11,11 +11,13 @@ import DashboardSummaryCard from "./_components/DashboardSummaryCard";
 import DashboardTopbar from "./_components/DashboardTopbar";
 import RecentReceiptsCard from "./_components/RecentReceiptsCard";
 import TopCategoriesCard from "./_components/TopCategoriesCard";
+import ReceiptDetailDialog from "./receipt/_components/ReceiptDetailDialog";
 import type {
   CategorySummary,
   DateFilter,
   ReceiptItem,
 } from "./_lib/dashboardTypes";
+import type { ReceiptCategory, ReceiptData } from "./receipt/_lib/receiptTypes";
 import {
   buildDateParams,
   getComparisonLabel,
@@ -38,24 +40,22 @@ export default function Dashboard() {
   const [loadingReceipts, setLoadingReceipts] = useState(false);
   const [allReceipts, setAllReceipts] = useState<ReceiptItem[]>([]);
   const [isExporting, setIsExporting] = useState(false);
+  const [selectedReceipt, setSelectedReceipt] = useState<ReceiptData | null>(
+    null,
+  );
+  const [categories, setCategories] = useState<ReceiptCategory[]>([]);
 
   useEffect(() => {
     const checkUser = async () => {
       const { data } = await supabaseClient.auth.getUser();
-
-      if (!data.user) {
-        router.replace("/auth");
-      }
+      if (!data.user) router.replace("/auth");
     };
-
     checkUser();
   }, [router]);
 
   useEffect(() => {
     const handleClickOutside = () => setShowDateDropdown(false);
-
     window.addEventListener("click", handleClickOutside);
-
     return () => window.removeEventListener("click", handleClickOutside);
   }, []);
 
@@ -83,7 +83,8 @@ export default function Dashboard() {
         const categoryData = await categoryRes.json();
 
         const currentTotal = (currentData.receipts || []).reduce(
-          (sum: number, receipt: ReceiptItem) => sum + (receipt.total_amount || 0),
+          (sum: number, receipt: ReceiptItem) =>
+            sum + (receipt.total_amount || 0),
           0,
         );
 
@@ -118,12 +119,16 @@ export default function Dashboard() {
       setLoadingReceipts(true);
 
       try {
-        const response = await fetch("/api/receipt?page=1&limit=4", {
-          credentials: "include",
-        });
+        const [receiptRes, categoryRes] = await Promise.all([
+          fetch("/api/receipt?page=1&limit=4", { credentials: "include" }),
+          fetch("/api/categories", { credentials: "include" }),
+        ]);
 
-        const data = await response.json();
+        const data = await receiptRes.json();
+        const categoryData = await categoryRes.json();
+
         setRecentReceipts(data.receipts || []);
+        setCategories(categoryData.categories || []);
       } catch (error) {
         console.error(error);
       } finally {
@@ -148,9 +153,7 @@ export default function Dashboard() {
     setShowDateDropdown(false);
   };
 
-  const handleApplyCustomRange = () => {
-    setShowDateDropdown(false);
-  };
+  const handleApplyCustomRange = () => setShowDateDropdown(false);
 
   const handleResetFilter = () => {
     setDateFilter("");
@@ -171,7 +174,6 @@ export default function Dashboard() {
 
   const handleExport = async () => {
     setIsExporting(true);
-
     try {
       const exportReceipts = allReceipts.map((receipt) => ({
         id: receipt.id,
@@ -200,14 +202,38 @@ export default function Dashboard() {
     }
   };
 
+  const handleReceiptUpdated = (updated: ReceiptData) => {
+    setRecentReceipts((prev) =>
+      prev.map((r) =>
+        r.id === updated.id ? (updated as unknown as ReceiptItem) : r,
+      ),
+    );
+    setSelectedReceipt(updated);
+  };
+
+  const handleReceiptDeleted = (id: string) => {
+    setRecentReceipts((prev) => prev.filter((r) => r.id !== id));
+    setSelectedReceipt(null);
+  };
+
   return (
-    <div className="flex min-h-screen bg-[#F8FAFC] text-[#0F172A] antialiased">
+    <div className="flex min-h-screen overflow-x-hidden bg-[#F8FAFC] text-[#0F172A] antialiased">
       <DashboardSidebar activeItem="dashboard" onLogout={handleLogout} />
 
-      <main className="relative min-h-screen flex-1 pb-24 md:ml-64 md:pb-8">
+      {selectedReceipt && (
+        <ReceiptDetailDialog
+          receipt={selectedReceipt}
+          categories={categories}
+          onClose={() => setSelectedReceipt(null)}
+          onUpdated={handleReceiptUpdated}
+          onDeleted={handleReceiptDeleted}
+        />
+      )}
+
+      <main className="relative min-h-screen w-full flex-1 overflow-x-hidden pb-24 md:ml-64 md:pb-8">
         <DashboardTopbar />
 
-        <div className="mx-auto max-w-6xl space-y-6 px-4 pb-8 pt-24 md:px-8">
+        <div className="mx-auto max-w-6xl space-y-6 px-4 pb-8 pt-20 md:px-8">
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
             <DashboardSummaryCard
               comparisonLabel={comparisonLabel}
@@ -222,9 +248,7 @@ export default function Dashboard() {
               percentage={percentage}
               showDateDropdown={showDateDropdown}
               startDate={startDate}
-              toggleDateDropdown={() =>
-                setShowDateDropdown((previous) => !previous)
-              }
+              toggleDateDropdown={() => setShowDateDropdown((prev) => !prev)}
               totalSpent={totalSpent}
             />
 
@@ -234,12 +258,12 @@ export default function Dashboard() {
           <RecentReceiptsCard
             loadingReceipts={loadingReceipts}
             recentReceipts={recentReceipts}
+            onOpenReceipt={(receipt) =>
+              setSelectedReceipt(receipt as unknown as ReceiptData)
+            }
           />
 
-          <DashboardActions
-            isExporting={isExporting}
-            onExport={handleExport}
-          />
+          <DashboardActions isExporting={isExporting} onExport={handleExport} />
         </div>
       </main>
     </div>

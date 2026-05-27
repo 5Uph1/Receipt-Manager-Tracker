@@ -70,7 +70,7 @@ export default function DashboardSummaryCard({
           >
             <button
               onClick={toggleDateDropdown}
-              className={`flex items-center gap-2 rounded-full px-3 py-1.5 font-['Plus_Jakarta_Sans'] text-sm font-medium transition-colors ${
+              className={`flex items-center gap-2 rounded-full px-3 py-1.5 font-['Plus_Jakarta_Sans'] text-sm font-medium transition-colors cursor-pointer ${
                 dateFilter
                   ? "border border-white/30 bg-white/20 text-white"
                   : "border border-white/20 bg-white/10 text-blue-100 hover:bg-white/20"
