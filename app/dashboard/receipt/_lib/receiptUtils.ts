@@ -1,7 +1,4 @@
-import type {
-  ReceiptDateFilter,
-  ReceiptSortBy,
-} from "./receiptTypes";
+import type { ReceiptDateFilter, ReceiptSortBy } from "./receiptTypes";
 
 export const receiptDateLabelMap: Record<ReceiptDateFilter, string> = {
   this_week: "Minggu Ini",
@@ -30,6 +27,8 @@ export function formatReceiptCurrency(num: number) {
   return new Intl.NumberFormat("id-ID", {
     style: "currency",
     currency: "IDR",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
   }).format(num);
 }
 
