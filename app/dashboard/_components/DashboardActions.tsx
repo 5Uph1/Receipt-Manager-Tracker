@@ -12,9 +12,9 @@ export default function DashboardActions({
   onExport,
 }: DashboardActionsProps) {
   return (
-    <div className="flex gap-4 pb-8 pt-4">
+    <div className="flex flex-col gap-3 pb-4 pt-2 sm:flex-row">
       <Link href="/dashboard/insight" className="flex-1">
-        <span className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-[1.5rem] border border-[#E2E8F0] bg-white py-4 font-semibold text-[#0F172A] shadow-sm transition-all hover:border-[#2563EB]/30 hover:bg-[#F8FAFC] hover:text-[#2563EB] hover:shadow-md">
+        <span className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-[1.5rem] border border-[#E2E8F0] bg-white py-3.5 font-semibold text-[#0F172A] shadow-sm transition-all hover:border-[#2563EB]/30 hover:bg-[#F8FAFC] hover:text-[#2563EB] hover:shadow-md md:py-4">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -35,7 +35,7 @@ export default function DashboardActions({
       <button
         onClick={onExport}
         disabled={isExporting}
-        className="flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-[1.5rem] border border-[#E2E8F0] bg-white py-4 font-semibold text-[#0F172A] shadow-sm transition-all hover:border-[#2563EB]/30 hover:bg-[#F8FAFC] hover:text-[#2563EB] hover:shadow-md disabled:cursor-not-allowed disabled:opacity-50"
+        className="flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-[1.5rem] border border-[#E2E8F0] bg-white py-3.5 font-semibold text-[#0F172A] shadow-sm transition-all hover:border-[#2563EB]/30 hover:bg-[#F8FAFC] hover:text-[#2563EB] hover:shadow-md disabled:cursor-not-allowed disabled:opacity-50 md:py-4"
       >
         {isExporting ? (
           <>

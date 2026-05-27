@@ -1,7 +1,19 @@
 "use client";
 
-import { CalendarDays, Check, ChevronDown, DollarSign, Search, Tag, X } from "lucide-react";
-import type { ReceiptCategory, ReceiptDateFilter, ReceiptSortBy } from "../_lib/receiptTypes";
+import {
+  CalendarDays,
+  Check,
+  ChevronDown,
+  DollarSign,
+  Search,
+  Tag,
+  X,
+} from "lucide-react";
+import type {
+  ReceiptCategory,
+  ReceiptDateFilter,
+  ReceiptSortBy,
+} from "../_lib/receiptTypes";
 
 interface ReceiptFiltersProps {
   categories: ReceiptCategory[];
@@ -45,14 +57,15 @@ export default function ReceiptFilters({
     : "Category";
 
   return (
-    <div className="flex flex-col items-center gap-3 rounded-2xl border border-[#E2E8F0] bg-white p-4 lg:flex-row">
-      <div className="relative w-full lg:flex-1">
+    <div className="flex flex-col gap-3 rounded-2xl border border-[#E2E8F0] bg-white p-3 md:p-4">
+      {/* Search */}
+      <div className="relative w-full">
         <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#64748B]">
           <Search size={16} />
         </div>
         <input
           className="w-full rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] py-2.5 pl-10 pr-10 font-['Plus_Jakarta_Sans'] text-sm text-[#0F172A] outline-none transition-all placeholder:text-[#94A3B8] focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20"
-          placeholder="Search merchants, notes, or amounts..."
+          placeholder="Search merchants or notes..."
           type="text"
           value={search}
           onChange={(event) => onSearchChange(event.target.value)}
@@ -70,23 +83,25 @@ export default function ReceiptFilters({
         )}
       </div>
 
-      <div className="flex w-full gap-2 overflow-visible pb-1 lg:w-auto lg:pb-0">
-        <div className="relative">
+      {/* Filter Buttons — scroll horizontal di mobile */}
+      <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none">
+        {/* Date Filter */}
+        <div className="relative shrink-0">
           <button
             onClick={(event) => {
               event.stopPropagation();
               setOpenDropdown(openDropdown === "date" ? null : "date");
             }}
-            className={`flex cursor-pointer items-center gap-2 whitespace-nowrap rounded-xl px-3.5 py-2.5 font-['Plus_Jakarta_Sans'] text-sm font-medium transition-colors ${
+            className={`flex cursor-pointer items-center gap-1.5 whitespace-nowrap rounded-xl px-3 py-2 font-['Plus_Jakarta_Sans'] text-xs font-semibold transition-colors md:gap-2 md:px-3.5 md:py-2.5 md:text-sm ${
               dateFilter
                 ? "bg-[#2563EB] text-white"
                 : "bg-[#F1F5F9] text-[#64748B] hover:bg-[#E2E8F0]"
             }`}
           >
-            <CalendarDays size={15} />
+            <CalendarDays size={14} />
             {dateButtonLabel}
             <ChevronDown
-              size={13}
+              size={12}
               className={`transition-transform ${openDropdown === "date" ? "rotate-180" : ""}`}
             />
           </button>
@@ -111,7 +126,9 @@ export default function ReceiptFilters({
                 >
                   <CalendarDays size={14} />
                   {filter === "this_week" ? "Minggu Ini" : "Bulan Ini"}
-                  {dateFilter === filter && <Check size={13} className="ml-auto" />}
+                  {dateFilter === filter && (
+                    <Check size={13} className="ml-auto" />
+                  )}
                 </button>
               ))}
               <div className="mx-4 my-1 border-t border-[#E2E8F0]" />
@@ -120,8 +137,16 @@ export default function ReceiptFilters({
                   Custom Range
                 </p>
                 {[
-                  { label: "Dari", value: startDate, field: "startDate" as const },
-                  { label: "Sampai", value: endDate, field: "endDate" as const },
+                  {
+                    label: "Dari",
+                    value: startDate,
+                    field: "startDate" as const,
+                  },
+                  {
+                    label: "Sampai",
+                    value: endDate,
+                    field: "endDate" as const,
+                  },
                 ].map(({ field, label, value }) => (
                   <div key={label} className="flex flex-col gap-1">
                     <label className="font-['Plus_Jakarta_Sans'] text-xs text-[#64748B]">
@@ -163,22 +188,23 @@ export default function ReceiptFilters({
           )}
         </div>
 
-        <div className="relative">
+        {/* Category Filter */}
+        <div className="relative shrink-0">
           <button
             onClick={(event) => {
               event.stopPropagation();
               setOpenDropdown(openDropdown === "category" ? null : "category");
             }}
-            className={`flex cursor-pointer items-center gap-2 whitespace-nowrap rounded-xl px-3.5 py-2.5 font-['Plus_Jakarta_Sans'] text-sm font-medium transition-colors ${
+            className={`flex cursor-pointer items-center gap-1.5 whitespace-nowrap rounded-xl px-3 py-2 font-['Plus_Jakarta_Sans'] text-xs font-semibold transition-colors md:gap-2 md:px-3.5 md:py-2.5 md:text-sm ${
               selectedCategory
                 ? "bg-[#2563EB] text-white"
                 : "bg-[#F1F5F9] text-[#64748B] hover:bg-[#E2E8F0]"
             }`}
           >
-            <Tag size={15} />
+            <Tag size={14} />
             {selectedCategoryLabel}
             <ChevronDown
-              size={13}
+              size={12}
               className={`transition-transform ${openDropdown === "category" ? "rotate-180" : ""}`}
             />
           </button>
@@ -225,22 +251,23 @@ export default function ReceiptFilters({
           )}
         </div>
 
-        <div className="relative">
+        {/* Sort */}
+        <div className="relative shrink-0">
           <button
             onClick={(event) => {
               event.stopPropagation();
               setOpenDropdown(openDropdown === "sort" ? null : "sort");
             }}
-            className={`flex cursor-pointer items-center gap-2 whitespace-nowrap rounded-xl px-3.5 py-2.5 font-['Plus_Jakarta_Sans'] text-sm font-medium transition-colors ${
+            className={`flex cursor-pointer items-center gap-1.5 whitespace-nowrap rounded-xl px-3 py-2 font-['Plus_Jakarta_Sans'] text-xs font-semibold transition-colors md:gap-2 md:px-3.5 md:py-2.5 md:text-sm ${
               sortBy !== "newest"
                 ? "bg-[#2563EB] text-white"
                 : "bg-[#F1F5F9] text-[#64748B] hover:bg-[#E2E8F0]"
             }`}
           >
-            <DollarSign size={15} />
+            <DollarSign size={14} />
             {sortLabel}
             <ChevronDown
-              size={13}
+              size={12}
               className={`transition-transform ${openDropdown === "sort" ? "rotate-180" : ""}`}
             />
           </button>
@@ -270,7 +297,9 @@ export default function ReceiptFilters({
                 >
                   <DollarSign size={14} />
                   {option.label}
-                  {sortBy === option.key && <Check size={13} className="ml-auto" />}
+                  {sortBy === option.key && (
+                    <Check size={13} className="ml-auto" />
+                  )}
                 </button>
               ))}
             </div>

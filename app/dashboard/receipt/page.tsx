@@ -221,7 +221,7 @@ export default function ReceiptPage() {
         action={
           <Link
             href="/dashboard/receipt/newReceipt"
-            className="flex items-center gap-2 rounded-xl bg-[#2563EB] px-5 py-2.5 text-sm font-semibold text-white transition-colors duration-150 hover:bg-[#1D4ED8]"
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#2563EB] px-5 py-2.5 text-sm font-semibold text-white transition-colors duration-150 hover:bg-[#1D4ED8] sm:w-auto"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

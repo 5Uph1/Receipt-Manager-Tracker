@@ -2,7 +2,10 @@
 
 import { MoreVertical, Receipt, RefreshCw } from "lucide-react";
 import type { ReceiptData } from "../_lib/receiptTypes";
-import { formatReceiptCurrency, formatReceiptShortDate } from "../_lib/receiptUtils";
+import {
+  formatReceiptCurrency,
+  formatReceiptShortDate,
+} from "../_lib/receiptUtils";
 
 interface ReceiptGridProps {
   dateFilterActive: boolean;
@@ -22,29 +25,30 @@ export default function ReceiptGrid({
   selectedCategory,
 }: ReceiptGridProps) {
   return (
-    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:gap-4 xl:grid-cols-3">
       {receipts.map((receipt) => (
         <div
           key={receipt.id}
           onClick={() => onOpenReceipt(receipt)}
-          className="group relative flex h-full cursor-pointer flex-col overflow-hidden rounded-2xl border border-[#E2E8F0] bg-white p-5 transition-all hover:border-[#2563EB]/20 hover:shadow-md hover:shadow-[#2563EB]/5"
+          className="group relative flex cursor-pointer flex-col overflow-hidden rounded-2xl border border-[#E2E8F0] bg-white p-4 transition-all hover:border-[#2563EB]/20 hover:shadow-md hover:shadow-[#2563EB]/5 md:p-5"
         >
           <div
             className="absolute left-0 top-0 h-full w-[3px] rounded-l-2xl"
             style={{ backgroundColor: receipt.categories?.color }}
           />
-          <div className="mb-5 flex items-start justify-between pl-3">
-            <div className="flex items-center gap-3">
+
+          <div className="mb-4 flex items-start justify-between pl-3">
+            <div className="flex items-center gap-2.5 md:gap-3">
               <div
-                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-xl"
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-lg md:h-11 md:w-11 md:text-xl"
                 style={{
                   backgroundColor: `${receipt.categories?.color ?? "#2563EB"}18`,
                 }}
               >
                 {receipt.categories?.icon ?? "🧾"}
               </div>
-              <div>
-                <h3 className="font-['Plus_Jakarta_Sans'] text-sm font-semibold leading-tight text-[#0F172A]">
+              <div className="min-w-0">
+                <h3 className="truncate font-['Plus_Jakarta_Sans'] text-sm font-semibold leading-tight text-[#0F172A]">
                   {receipt.merchant_name}
                 </h3>
                 <p className="mt-0.5 font-['Plus_Jakarta_Sans'] text-xs text-[#64748B]">
@@ -53,19 +57,19 @@ export default function ReceiptGrid({
               </div>
             </div>
             <button
-              className="rounded-lg p-1 text-[#E2E8F0] opacity-0 transition-colors hover:bg-[#EFF6FF] hover:text-[#2563EB] group-hover:opacity-100"
+              className="shrink-0 rounded-lg p-1 text-[#E2E8F0] opacity-0 transition-colors hover:bg-[#EFF6FF] hover:text-[#2563EB] group-hover:opacity-100"
               onClick={(event) => {
                 event.stopPropagation();
                 onOpenReceipt(receipt);
               }}
               title="View Detail"
             >
-              <MoreVertical size={16} />
+              <MoreVertical size={15} />
             </button>
           </div>
 
           <div className="mt-auto pl-3">
-            <div className="mb-2.5 flex items-center gap-2">
+            <div className="mb-2 flex flex-wrap items-center gap-1.5">
               {receipt.categories && (
                 <span
                   className="rounded-lg px-2 py-0.5 font-['Plus_Jakarta_Sans'] text-[10px] font-bold uppercase tracking-wider"
@@ -81,7 +85,7 @@ export default function ReceiptGrid({
                 <Receipt size={11} /> {receipt.receipt_items?.length ?? 0} items
               </span>
             </div>
-            <div className="font-['Plus_Jakarta_Sans'] text-2xl font-bold tracking-tight text-[#0F172A]">
+            <div className="font-['Plus_Jakarta_Sans'] text-xl font-bold tracking-tight text-[#0F172A] md:text-2xl">
               {formatReceiptCurrency(receipt.total_amount)}
             </div>
           </div>
@@ -89,7 +93,7 @@ export default function ReceiptGrid({
       ))}
 
       {loading && (
-        <div className="col-span-full flex justify-center py-16">
+        <div className="col-span-full flex justify-center py-12">
           <div className="flex flex-col items-center gap-3 text-center">
             <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-[#BFDBFE] bg-[#EFF6FF]">
               <RefreshCw size={20} className="animate-spin text-[#2563EB]" />
@@ -105,7 +109,7 @@ export default function ReceiptGrid({
       )}
 
       {!loading && receipts.length === 0 && (
-        <div className="col-span-full flex flex-col items-center justify-center py-16 text-center">
+        <div className="col-span-full flex flex-col items-center justify-center py-12 text-center">
           <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl border border-[#E2E8F0] bg-[#F1F5F9]">
             <Receipt size={24} className="text-[#94A3B8]" />
           </div>

@@ -1,9 +1,22 @@
 "use client";
 
-import { Check, ChevronDown, Pencil, RefreshCw, ShoppingBag, Sparkles, Trash2, X } from "lucide-react";
+import {
+  Check,
+  ChevronDown,
+  Pencil,
+  RefreshCw,
+  ShoppingBag,
+  Sparkles,
+  Trash2,
+  X,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import ConfirmDeleteDialog from "./ConfirmDeleteDialog";
-import type { ReceiptCategory, ReceiptData, ReceiptItem } from "../_lib/receiptTypes";
+import type {
+  ReceiptCategory,
+  ReceiptData,
+  ReceiptItem,
+} from "../_lib/receiptTypes";
 import {
   createEmptyReceiptItem,
   formatReceiptCurrency,
@@ -34,7 +47,9 @@ export default function ReceiptDetailDialog({
   const [notes, setNotes] = useState(receipt.notes ?? "");
   const [categoryId, setCategoryId] = useState(receipt.category_id ?? "");
   const [items, setItems] = useState<ReceiptItem[]>(
-    receipt.receipt_items?.length ? receipt.receipt_items : [createEmptyReceiptItem()],
+    receipt.receipt_items?.length
+      ? receipt.receipt_items
+      : [createEmptyReceiptItem()],
   );
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
@@ -47,7 +62,8 @@ export default function ReceiptDetailDialog({
   }, [items]);
 
   const selectedCategory =
-    categories.find((category) => category.id === categoryId) ?? receipt.categories;
+    categories.find((category) => category.id === categoryId) ??
+    receipt.categories;
 
   const handleAddItem = () => {
     setItems((previous) => [...previous, createEmptyReceiptItem()]);
@@ -63,7 +79,9 @@ export default function ReceiptDetailDialog({
     value: number | string,
   ) => {
     setItems((previous) =>
-      previous.map((item) => (item.id === id ? { ...item, [field]: value } : item)),
+      previous.map((item) =>
+        item.id === id ? { ...item, [field]: value } : item,
+      ),
     );
   };
 
@@ -117,10 +135,13 @@ export default function ReceiptDetailDialog({
     setErrorMsg("");
 
     try {
-      const data = await safeReceiptFetch(`/api/receipt/${receipt.id}/categorize`, {
-        method: "POST",
-        credentials: "include",
-      });
+      const data = await safeReceiptFetch(
+        `/api/receipt/${receipt.id}/categorize`,
+        {
+          method: "POST",
+          credentials: "include",
+        },
+      );
 
       onUpdated(data.receipt);
       setCategoryId(data.receipt.category_id ?? "");
@@ -149,7 +170,7 @@ export default function ReceiptDetailDialog({
         onClick={onClose}
       >
         <div
-          className="relative flex max-h-[90vh] w-full max-w-md flex-col overflow-hidden rounded-3xl border border-[#E2E8F0] bg-white shadow-2xl"
+          className="relative flex w-full flex-col overflow-hidden border border-[#E2E8F0] bg-white shadow-2xl max-h-screen rounded-none sm:max-h-[90vh] sm:max-w-md sm:rounded-3xl"
           onClick={(event) => event.stopPropagation()}
         >
           <div
@@ -266,7 +287,10 @@ export default function ReceiptDetailDialog({
                         >
                           <div className="flex items-center gap-3">
                             <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#EFF6FF]">
-                              <ShoppingBag size={12} className="text-[#2563EB]" />
+                              <ShoppingBag
+                                size={12}
+                                className="text-[#2563EB]"
+                              />
                             </div>
                             <div>
                               <span className="font-['Plus_Jakarta_Sans'] text-sm font-medium text-[#0F172A]">
@@ -316,7 +340,11 @@ export default function ReceiptDetailDialog({
                 </div>
 
                 {receipt.image_url && (
-                  <a href={receipt.image_url} target="_blank" rel="noopener noreferrer">
+                  <a
+                    href={receipt.image_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <img
                       src={receipt.image_url}
                       alt="Receipt"
@@ -374,7 +402,11 @@ export default function ReceiptDetailDialog({
                         <input
                           value={item.item_name}
                           onChange={(event) =>
-                            handleItemChange(item.id, "item_name", event.target.value)
+                            handleItemChange(
+                              item.id,
+                              "item_name",
+                              event.target.value,
+                            )
                           }
                           placeholder="Item name"
                           className="flex-1 bg-transparent px-2 py-1 font-['Plus_Jakarta_Sans'] text-sm text-[#0F172A] outline-none placeholder:text-[#CBD5E1]"
@@ -383,7 +415,11 @@ export default function ReceiptDetailDialog({
                           type="number"
                           value={item.qty}
                           onChange={(event) =>
-                            handleItemChange(item.id, "qty", Number(event.target.value))
+                            handleItemChange(
+                              item.id,
+                              "qty",
+                              Number(event.target.value),
+                            )
                           }
                           className="w-14 rounded-lg border border-[#E2E8F0] bg-white px-2 py-1.5 text-center text-sm text-[#0F172A] outline-none transition-colors focus:border-[#2563EB]"
                         />
@@ -391,7 +427,11 @@ export default function ReceiptDetailDialog({
                           type="number"
                           value={item.price}
                           onChange={(event) =>
-                            handleItemChange(item.id, "price", Number(event.target.value))
+                            handleItemChange(
+                              item.id,
+                              "price",
+                              Number(event.target.value),
+                            )
                           }
                           className="w-24 rounded-lg border border-[#E2E8F0] bg-white px-2 py-1.5 text-sm text-[#0F172A] outline-none transition-colors focus:border-[#2563EB]"
                         />

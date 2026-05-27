@@ -1,6 +1,12 @@
 "use client";
 
-import { CalendarDays, Check, ChevronDown, TrendingDown, TrendingUp } from "lucide-react";
+import {
+  CalendarDays,
+  Check,
+  ChevronDown,
+  TrendingDown,
+  TrendingUp,
+} from "lucide-react";
 import type { DateFilter } from "../_lib/dashboardTypes";
 import { formatRupiah } from "../_lib/dashboardUtils";
 
@@ -58,7 +64,10 @@ export default function DashboardSummaryCard({
             Total Spent
           </h2>
 
-          <div className="relative" onClick={(event) => event.stopPropagation()}>
+          <div
+            className="relative"
+            onClick={(event) => event.stopPropagation()}
+          >
             <button
               onClick={toggleDateDropdown}
               className={`flex items-center gap-2 rounded-full px-3 py-1.5 font-['Plus_Jakarta_Sans'] text-sm font-medium transition-colors ${
@@ -98,7 +107,9 @@ export default function DashboardSummaryCard({
                 >
                   <CalendarDays size={14} />
                   This Week
-                  {dateFilter === "this_week" && <Check size={13} className="ml-auto" />}
+                  {dateFilter === "this_week" && (
+                    <Check size={13} className="ml-auto" />
+                  )}
                 </button>
 
                 <button
@@ -111,7 +122,9 @@ export default function DashboardSummaryCard({
                 >
                   <CalendarDays size={14} />
                   This Month
-                  {dateFilter === "this_month" && <Check size={13} className="ml-auto" />}
+                  {dateFilter === "this_month" && (
+                    <Check size={13} className="ml-auto" />
+                  )}
                 </button>
 
                 <div className="mx-4 my-1 border-t border-[#E2E8F0]" />
@@ -128,7 +141,9 @@ export default function DashboardSummaryCard({
                     <input
                       type="date"
                       value={startDate}
-                      onChange={(event) => onStartDateChange(event.target.value)}
+                      onChange={(event) =>
+                        onStartDateChange(event.target.value)
+                      }
                       className="rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-3 py-2 font-['Plus_Jakarta_Sans'] text-sm text-[#0F172A] outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-[#2563EB]/20"
                     />
                   </div>
@@ -185,7 +200,7 @@ export default function DashboardSummaryCard({
       </div>
 
       <div className="relative z-0 mt-8">
-        <div className="mb-4 text-[4rem] leading-none font-extrabold tracking-tighter text-white">
+        <div className="mb-4 text-[2.5rem] leading-none font-extrabold tracking-tighter text-white md:text-[4rem]">
           {loadingTotal ? "Loading..." : formatRupiah(totalSpent)}
         </div>
 

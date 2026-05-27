@@ -14,9 +14,9 @@ export default function RecentReceiptsCard({
   recentReceipts,
 }: RecentReceiptsCardProps) {
   return (
-    <div className="mt-8 rounded-[2rem] border border-[#E2E8F0] bg-white p-6 shadow-sm md:p-8">
-      <div className="mb-6 flex items-center justify-between">
-        <h3 className="text-xl font-bold tracking-tight text-[#0F172A]">
+    <div className="rounded-[2rem] border border-[#E2E8F0] bg-white p-5 shadow-sm md:p-8">
+      <div className="mb-5 flex items-center justify-between">
+        <h3 className="text-lg font-bold tracking-tight text-[#0F172A] md:text-xl">
           Recent Receipts
         </h3>
         <Link
@@ -28,7 +28,7 @@ export default function RecentReceiptsCard({
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
             fill="currentColor"
-            className="size-5"
+            className="size-4"
           >
             <path
               fillRule="evenodd"
@@ -39,51 +39,48 @@ export default function RecentReceiptsCard({
         </Link>
       </div>
 
-      <div className="space-y-2">
-        <div className="space-y-1">
-          {!loadingReceipts &&
-            recentReceipts.map((receipt) => (
-              <div
-                key={receipt.id}
-                className="group flex cursor-pointer items-center rounded-xl border border-transparent p-3 transition-all hover:border-[#E2E8F0] hover:bg-[#F8FAFC]"
-              >
-                <img
-                  src={receipt.image_url || "/placeholder.png"}
-                  className="mr-4 h-12 w-12 rounded-xl border border-[#E2E8F0] object-cover"
-                  alt={receipt.merchant_name}
-                />
+      <div className="space-y-1">
+        {!loadingReceipts &&
+          recentReceipts.map((receipt) => (
+            <div
+              key={receipt.id}
+              className="group flex cursor-pointer items-center gap-3 rounded-xl border border-transparent p-3 transition-all hover:border-[#E2E8F0] hover:bg-[#F8FAFC]"
+            >
+              <img
+                src={receipt.image_url || "/placeholder.png"}
+                className="h-11 w-11 shrink-0 rounded-xl border border-[#E2E8F0] object-cover md:h-12 md:w-12"
+                alt={receipt.merchant_name}
+              />
 
-                <div className="flex-1">
-                  <div className="text-base font-bold text-[#0F172A]">
-                    {receipt.merchant_name}
-                  </div>
-
-                  <div className="flex items-center gap-2 text-sm text-[#64748B]">
-                    {formatDate(receipt.receipt_date)}
-                    <span className="h-1 w-1 rounded-full bg-[#CBD5E1]" />
-                    <span
-                      className="text-[10px] font-bold uppercase tracking-wider"
-                      style={{ color: receipt.categories?.color }}
-                    >
-                      {receipt.categories?.name || "Uncategorized"}
-                    </span>
-                  </div>
+              <div className="min-w-0 flex-1">
+                <div className="truncate text-sm font-bold text-[#0F172A] md:text-base">
+                  {receipt.merchant_name}
                 </div>
-
-                <div className="text-right">
-                  <div className="text-lg font-bold text-[#0F172A]">
-                    {formatRupiah(receipt.total_amount)}
-                  </div>
+                <div className="flex flex-wrap items-center gap-1 text-xs text-[#64748B]">
+                  <span>{formatDate(receipt.receipt_date)}</span>
+                  <span className="h-1 w-1 rounded-full bg-[#CBD5E1]" />
+                  <span
+                    className="text-[10px] font-bold uppercase tracking-wider"
+                    style={{ color: receipt.categories?.color }}
+                  >
+                    {receipt.categories?.name || "Uncategorized"}
+                  </span>
                 </div>
               </div>
-            ))}
 
-          {!loadingReceipts && recentReceipts.length === 0 && (
-            <div className="py-6 text-center text-sm text-[#94A3B8]">
-              No receipts yet
+              <div className="shrink-0 text-right">
+                <div className="text-sm font-bold text-[#0F172A] md:text-lg">
+                  {formatRupiah(receipt.total_amount)}
+                </div>
+              </div>
             </div>
-          )}
-        </div>
+          ))}
+
+        {!loadingReceipts && recentReceipts.length === 0 && (
+          <div className="py-6 text-center text-sm text-[#94A3B8]">
+            No receipts yet
+          </div>
+        )}
 
         {loadingReceipts && (
           <div className="group relative flex items-center overflow-hidden rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] p-3">
@@ -100,7 +97,6 @@ export default function RecentReceiptsCard({
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className="lucide lucide-refresh-cw-icon lucide-refresh-cw"
                   >
                     <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />
                     <path d="M21 3v5h-5" />
